@@ -1,24 +1,18 @@
+import java.util.regex.Pattern;
+
 public class Validator {
 
+    private static final Pattern PATTERN = Pattern.compile("[a-zA-Z0-9_]{0,20}+$");
+
     public static void check(String login, String password, String confirmPassword) throws WrongLoginException {
-        if (login.length() > 20) {
-            throw new WrongLoginException("Логин не может быть более 20 символов!");
+        if (login.length() > 20 || !PATTERN.matcher(login).matches()) {
+            throw new WrongLoginException("Логин содержит недопустимые символы или длинее 20 знаков!");
         }
-        if (!checkSimbols(login)) {
-            throw new WrongLoginException("Логин содержит недопустимые символы!");
-        }
-        if (password.length() > 20) {
-            throw new WrongPasswordException("Пароль не может быть более 20 символов!");
-        }
-        if (!checkSimbols(password)) {
-            throw new WrongPasswordException("Пароль содержит недопустимые символы!");
+        if (password.length() > 20 || !PATTERN.matcher(password).matches()) {
+            throw new WrongPasswordException("Пароль содержит недопустимые символы или длинее 20 символов!");
         }
         if (!password.equals(confirmPassword)) {
             throw new WrongPasswordException("Пароли не совпадают!");
         }
-    }
-
-    private static boolean checkSimbols(String str) {
-        return str.matches("[a-zA-Z0-9_]+$");
     }
 }
